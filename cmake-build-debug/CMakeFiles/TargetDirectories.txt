@@ -1,0 +1,5 @@
+/home/qraim/CLionProjects/GAG/cmake-build-debug/CMakeFiles/GAG.dir
+/home/qraim/CLionProjects/GAG/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/qraim/CLionProjects/GAG/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/home/qraim/CLionProjects/GAG/cmake-build-debug/CMakeFiles/GAG_autogen_timestamp_deps.dir
+/home/qraim/CLionProjects/GAG/cmake-build-debug/CMakeFiles/GAG_autogen.dir
