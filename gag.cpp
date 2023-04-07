@@ -30,6 +30,32 @@ gag::gag(QWidget *parent) : QWidget(parent) {
     Longueur = new QLineEdit;
     Hauteur = new QLineEdit;
 
+    // Create a custom locale with a period as the decimal separator
+// Create a custom locale with a period as the decimal separator
+    QLocale customLocale = QLocale::French;
+
+// Add input validators to QLineEdit widgets with the custom locale
+    QDoubleValidator *debitValidator = new QDoubleValidator(0, std::numeric_limits<double>::max(), 2, this);
+    debitValidator->setLocale(customLocale);
+    Debit->setValidator(debitValidator);
+
+    QDoubleValidator *espacementValidator = new QDoubleValidator(0, std::numeric_limits<double>::max(), 2, this);
+    espacementValidator->setLocale(customLocale);
+    Espacement->setValidator(espacementValidator);
+
+    QDoubleValidator *diametreValidator = new QDoubleValidator(0, std::numeric_limits<double>::max(), 2, this);
+    diametreValidator->setLocale(customLocale);
+    Diametre->setValidator(diametreValidator);
+
+    QDoubleValidator *longueurValidator = new QDoubleValidator(0, std::numeric_limits<double>::max(), 2, this);
+    longueurValidator->setLocale(customLocale);
+    Longueur->setValidator(longueurValidator);
+
+    QDoubleValidator *hauteurValidator = new QDoubleValidator(0, std::numeric_limits<double>::max(), 2, this);
+    hauteurValidator->setLocale(customLocale);
+    Hauteur->setValidator(hauteurValidator);
+
+
     QLabel *labelDebit = new QLabel("Debit: l/h");
     QLabel *labelEspacement = new QLabel("Espacement: m ");
     QLabel *labelDiametre = new QLabel("Diametre: mm");
@@ -135,11 +161,27 @@ void gag::AjoutDonnee() {
         temp.resize(10);
 
         float numero = _Donnees.size()+1;
-        float debit = Debit->text().toFloat();
-        float espacement = Espacement->text().toFloat();
-        float diametre = Diametre->text().toFloat();
-        float longueur = Longueur->text().toFloat();
-        float hauteur = Hauteur->text().toFloat();
+
+        QString debitText = Debit->text();
+        debitText.replace(',', '.');
+        float debit = debitText.toFloat();
+
+        QString espacementText = Espacement->text();
+        espacementText.replace(',', '.');
+        float espacement = espacementText.toFloat();
+
+        QString diametreText = Diametre->text();
+        diametreText.replace(',', '.');
+        float diametre = diametreText.toFloat();
+
+        QString longueurText = Longueur->text();
+        longueurText.replace(',', '.');
+        float longueur = longueurText.toFloat();
+
+        QString hauteurText = Hauteur->text();
+        hauteurText.replace(',', '.');
+        float hauteur = hauteurText.toFloat();
+
 
         temp[0] = numero;
         temp[1] = debit;

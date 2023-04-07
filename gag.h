@@ -20,6 +20,8 @@
 #include <QDialog>
 #include <QShortcut>
 #include <QPushButton>
+#include <QDoubleValidator>
+#include <QLocale>
 
 
 #include <vector>

@@ -248,6 +248,7 @@
   /usr/include/linux/errno.h \
   /usr/include/locale.h \
   /usr/include/pthread.h \
+  /usr/include/qt/QtCore/QLocale \
   /usr/include/qt/QtCore/qabstractitemmodel.h \
   /usr/include/qt/QtCore/qalgorithms.h \
   /usr/include/qt/QtCore/qarraydata.h \
@@ -314,6 +315,7 @@
   /usr/include/qt/QtCore/qvarlengtharray.h \
   /usr/include/qt/QtCore/qvector.h \
   /usr/include/qt/QtCore/qversiontagging.h \
+  /usr/include/qt/QtGui/QDoubleValidator \
   /usr/include/qt/QtGui/QKeyEvent \
   /usr/include/qt/QtGui/qbrush.h \
   /usr/include/qt/QtGui/qcolor.h \
