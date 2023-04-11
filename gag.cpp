@@ -31,10 +31,10 @@ gag::gag(QWidget *parent) : QWidget(parent) {
     Hauteur = new QLineEdit;
 
     // Create a custom locale with a period as the decimal separator
-// Create a custom locale with a period as the decimal separator
+    // Create a custom locale with a period as the decimal separator
     QLocale customLocale = QLocale::French;
 
-// Add input validators to QLineEdit widgets with the custom locale
+    // Add input validators to QLineEdit widgets with the custom locale
     QDoubleValidator *debitValidator = new QDoubleValidator(0, std::numeric_limits<double>::max(), 2, this);
     debitValidator->setLocale(customLocale);
     Debit->setValidator(debitValidator);
@@ -81,21 +81,70 @@ gag::gag(QWidget *parent) : QWidget(parent) {
     QLabel *labelDiametre2 = new QLabel("Diametre");
     QLabel *labelLongueur2 = new QLabel("Longueur");
     QLabel *labelHauteur2 = new QLabel("Hauteur");
-    QLabel *labelPerte = new QLabel("Perte");
+    QLabel *labelPerte = new QLabel("J");
     QLabel *labelPiezo = new QLabel("Piezo");
-    QLabel *labelSigmaPerte = new QLabel("ΣPerte");
+    QLabel *labelSigmaPerte = new QLabel("ΣJ");
     QLabel *labelSigmaPiezo = new QLabel("ΣPiezo");
 
-    topLayout->addWidget(labelNumero, 3, 0, Qt::AlignRight);
-    topLayout->addWidget(labelDebit2, 3, 1, Qt::AlignRight);
-    topLayout->addWidget(labelEspacement2, 3, 2, Qt::AlignRight);
-    topLayout->addWidget(labelDiametre2, 3, 3, Qt::AlignRight);
-    topLayout->addWidget(labelLongueur2, 3, 4, Qt::AlignRight);
-    topLayout->addWidget(labelHauteur2, 3, 5, Qt::AlignRight);
+    topLayout->addWidget(labelNumero, 3, 0, Qt::AlignCenter);
+    topLayout->addWidget(labelDebit2, 3, 1, Qt::AlignCenter);
+    topLayout->addWidget(labelEspacement2, 3, 2, Qt::AlignCenter);
+    topLayout->addWidget(labelDiametre2, 3, 3, Qt::AlignCenter);
+    topLayout->addWidget(labelLongueur2, 3, 4, Qt::AlignCenter);
+    topLayout->addWidget(labelHauteur2, 3, 5, Qt::AlignCenter);
     topLayout->addWidget(labelPerte, 3, 6, Qt::AlignCenter);
     topLayout->addWidget(labelPiezo, 3, 7, Qt::AlignCenter);
     topLayout->addWidget(labelSigmaPerte, 3, 8, Qt::AlignCenter);
     topLayout->addWidget(labelSigmaPiezo, 3, 9, Qt::AlignCenter);
+
+        // Create QLabel objects for units
+    QLabel *unitDebit2 = new QLabel("l/h");
+    QLabel *unitEspacement2 = new QLabel("m");
+    QLabel *unitDiametre2 = new QLabel("mm");
+    QLabel *unitLongueur2 = new QLabel("m");
+    QLabel *unitHauteur2 = new QLabel("m");
+    QLabel *unitPerte = new QLabel("m");
+    QLabel *unitPiezo = new QLabel("m");
+    QLabel *unitSigmaPerte = new QLabel("m");
+    QLabel *unitSigmaPiezo = new QLabel("m");
+
+    // Set the size policies for QLabel objects
+    QSizePolicy expandingPolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+    QSizePolicy fixedPolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+
+    labelNumero->setSizePolicy(fixedPolicy);
+    labelDebit2->setSizePolicy(expandingPolicy);
+    labelEspacement2->setSizePolicy(expandingPolicy);
+    labelDiametre2->setSizePolicy(expandingPolicy);
+    labelLongueur2->setSizePolicy(expandingPolicy);
+    labelHauteur2->setSizePolicy(expandingPolicy);
+    labelPerte->setSizePolicy(expandingPolicy);
+    labelPiezo->setSizePolicy(expandingPolicy);
+    labelSigmaPerte->setSizePolicy(expandingPolicy);
+    labelSigmaPiezo->setSizePolicy(expandingPolicy);
+
+    unitDebit2->setSizePolicy(expandingPolicy);
+    unitEspacement2->setSizePolicy(expandingPolicy);
+    unitDiametre2->setSizePolicy(expandingPolicy);
+    unitLongueur2->setSizePolicy(expandingPolicy);
+    unitHauteur2->setSizePolicy(expandingPolicy);
+    unitPerte->setSizePolicy(expandingPolicy);
+    unitPiezo->setSizePolicy(expandingPolicy);
+    unitSigmaPerte->setSizePolicy(expandingPolicy);
+    unitSigmaPiezo->setSizePolicy(expandingPolicy);
+
+
+    // Add the units to the layout, placing them in the row below the labels
+    topLayout->addWidget(unitDebit2, 4, 1, Qt::AlignCenter);
+    topLayout->addWidget(unitEspacement2, 4, 2, Qt::AlignCenter);
+    topLayout->addWidget(unitDiametre2, 4, 3, Qt::AlignCenter);
+    topLayout->addWidget(unitLongueur2, 4, 4, Qt::AlignCenter);
+    topLayout->addWidget(unitHauteur2, 4, 5, Qt::AlignCenter);
+    topLayout->addWidget(unitPerte, 4, 6, Qt::AlignCenter);
+    topLayout->addWidget(unitPiezo, 4, 7, Qt::AlignCenter);
+    topLayout->addWidget(unitSigmaPerte, 4, 8, Qt::AlignCenter);
+    topLayout->addWidget(unitSigmaPiezo, 4, 9, Qt::AlignCenter);
+
 
     for (int col = 0; col < 10; ++col) {
         topLayout->setColumnStretch(col, 1);
@@ -199,29 +248,37 @@ void gag::AjoutDonnee() {
     }
 }
 
-void gag::AjoutLigne(){
-    // Add a new line in the scroll area with the values
-    // Add a new line in the scroll area with the values
-    int row = _Donnees.size() - 1;
-    std::vector<float> temp = _Donnees[row];
-    for (int col = 0; col < temp.size(); ++col) {
+void gag::AjoutLigne() {
+    // Add a new row in the scroll area with the corresponding values
+    int row = _Donnees.size(); // Get the row number for the new row by adding 1 to the size of the "_Donnees" data vector.
+    const std::vector<float>& temp = _Donnees[row - 1]; // Copy the values of the last row for use as default values for the new row.
+
+    // Define the properties for the QLineEdit objects
+    QSizePolicy sizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+    sizePolicy.setHeightForWidth(true);
+    int fixedHeight = 40;
+    Qt::Alignment alignment = Qt::AlignCenter;
+
+    for (int col = 0; col < temp.size(); ++col) { // For each column
+        // Create a QLineEdit object to display the value and set its read-only, alignment, and size properties.
         QLineEdit *valueLabel = new QLineEdit(QString::number(temp[col]));
         valueLabel->setReadOnly(true);
-        valueLabel->setAlignment(Qt::AlignCenter);
-        valueLabel->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-        valueLabel->setFixedHeight(40); // Fixe la taille de la ligne.
-        // Adjust the row number to add the QLineEdit widget
-        // at the top and below the previous one.
+        valueLabel->setAlignment(alignment);
+        valueLabel->setSizePolicy(sizePolicy);
+        valueLabel->setFixedHeight(fixedHeight);
+
+        // Add the QLineEdit object into the scroll area using the appropriate row and column number.
         scrollAreaLayout->addWidget(valueLabel, row, col, Qt::AlignTop);
     }
 
-    // On fixe l'espacement vertical et l'alignement.
+    // Set the vertical spacing and alignment for the scroll area layout.
     scrollAreaLayout->setVerticalSpacing(15);
     scrollAreaLayout->setAlignment(Qt::AlignTop);
 
-    Debit->setFocus();
-
+    Debit->setFocus(); // Set focus on the "Debit" object after adding the new row.
 }
+
+
 
 // La fonction "focusPreviousInput" est appelée lorsqu'un raccourci clavier est utilisé pour passer au champ d'entrée précédent.
 void gag::focusPreviousInput() {
@@ -279,9 +336,6 @@ void gag::calcul() {
     float b = 0;
 
     // Initialise les variables.
-    float debit = 0;
-    float debitM3 = 0; // Débit en m3/h
-    float debitLs = 0; // Débit en l/s
     float espacement = 0;
     float diametre = 0;
     float longueur = 0;
@@ -289,12 +343,6 @@ void gag::calcul() {
     float perteCharge = 0;
     float piezo = 0;
     float sigmaDebit = 0; // Cumul débit
-    float vitesse = 0;
-    float aireTuyau = 0;
-    float sigmaPiezo = 0; // Cumul piezo
-    float sigmaPerte = 0; // Cumul perte
-    float sigmaLongueur = 0;
-    float sigmaHauteur = 0;
 
     // Sélectionne les critères en fonction de la matière.
     if (Materiau->currentText() == "PVC" || Materiau->currentText() == "PN") {
@@ -311,6 +359,12 @@ void gag::calcul() {
         b = -4.87;
     }
 
+    float sigmaPiezo = 0; // Cumul piezo
+    float sigmaPerte = 0; // Cumul perte
+    float sigmaLongueur = 0;
+    float sigmaHauteur = 0;
+
+    float K = 0.01; // Coefficient pour les pertes de charge (à ajuster en fonction de votre système).
     // Effectue les calculs pour chaque ligne de données.
     for (int i = 0; i < _Donnees.size(); ++i) {
 
@@ -320,20 +374,13 @@ void gag::calcul() {
         diametre = _Donnees[i][3];
         longueur = _Donnees[i][4];
         hauteur = _Donnees[i][5];
-        // Calcule l'aire du tuyau.
-        aireTuyau = (M_PI * pow((diametre / 1000) / 2, 2));
 
-        // Calcule le débit en m3/s.
-        debitM3 = sigmaDebit / 3600.0 / 1000.0;
-
-        // Calcule la vitesse.
-        vitesse = debitM3 / aireTuyau;
-
-        // Convertit le débit en l/s.
-        float sigmaDebitLs = sigmaDebit / 3600.0;
+        // Calcule le débit en m3/s et la vitesse.
+        float aireTuyau = (M_PI * pow((diametre / 1000) / 2, 2));
+        float vitesse = (sigmaDebit / 3600000.0) / aireTuyau;
 
         // Calcule la perte de charge.
-        perteCharge = k * pow(sigmaDebitLs, a) * pow(diametre, b) * longueur;
+        perteCharge = k * pow(sigmaDebit / 3600.0, a) * pow(diametre, b) * longueur;
 
         // Calcule la hauteur piezométrique.
         piezo = perteCharge + hauteur;
@@ -357,7 +404,7 @@ void gag::calcul() {
         sigmaHauteur += hauteur;
     }
 
-// Affiche les résultats dans les cases correspondantes en arrondissant à deux chiffres après la virgule.
+    // Affiche les résultats dans les cases correspondantes en arrondissant à deux chiffres après la virgule.
     CumulLongueur->setText(QString::number(sigmaLongueur, 'f', 2));
     CumulLongueur->setAlignment(Qt::AlignCenter);
     Cumulhauteur->setText(QString::number(sigmaHauteur, 'f', 2));
@@ -380,32 +427,40 @@ void gag::clear(){
 }
 
 void gag::RafraichirTableau() {
-    clear();
+    clear(); // Clear the current content of the scroll area.
 
-    // Iterate through the vector and add the data to the scrollArea.
+    // Define the properties for the QLineEdit objects
+    QSizePolicy sizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+    int fixedHeight = 40;
+    Qt::Alignment alignment = Qt::AlignCenter;
+
+    // Iterate through the "_Donnees" data vector and add the data to the scroll area.
     for (int i = 0; i < _Donnees.size(); ++i) {
         for (int j = 0; j < _Donnees[i].size(); ++j) {
             QLineEdit *value;
-            if (j == 0) {
+            if (j == 0) { // If we are on the first column, display the value as an integer.
                 value = new QLineEdit(QString::number(static_cast<int>(_Donnees[i][j])));
-            } else {
+            } else { // Otherwise, display the value with two decimal places.
                 value = new QLineEdit(QString::number(_Donnees[i][j], 'f', 2));
             }
             value->setReadOnly(true);
-            value->setAlignment(Qt::AlignCenter);
-            value->setFixedHeight(40); // Set the fixed height of the line.
-            value->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+            value->setAlignment(alignment);
+            value->setFixedHeight(fixedHeight); // Set the line size.
+            value->setSizePolicy(sizePolicy);
             scrollAreaLayout->addWidget(value, i + 1, j, Qt::AlignTop);
         }
     }
+
+    // Set the vertical spacing and alignment for the scroll area layout.
     scrollAreaLayout->setVerticalSpacing(15);
     scrollAreaLayout->setAlignment(Qt::AlignTop);
 }
 
 
+
 void gag::keyPressEvent(QKeyEvent *event) {
     // Vérifie si la touche Shift est enfoncée et si la touche Entrée est également enfoncée.
-    if (event->modifiers() & Qt::ShiftModifier && (event->key() == Qt::Key_Enter || event->key() == Qt::Key_Return)) {
+    if (event->modifiers() & Qt::ShiftModifier && event->key() == Qt::Key_Return) {
         // Appelle la fonction calcul().
         calcul();
     } else if (event->key() == Qt::Key_R) {
@@ -415,6 +470,7 @@ void gag::keyPressEvent(QKeyEvent *event) {
     } else if (event->key() == Qt::Key_Z) {
         enleverLigne();
     } else if (event->key() == Qt::Key_E) {
+        _Donnees.clear();
         clear();
     } else if (event->key() == Qt::Key_Control) {
         focusPreviousInput();
@@ -425,7 +481,7 @@ void gag::recopiederniereligne() { // Fonction déclenché par la touche 'R' qui
 
     int taille =_Donnees.size();
     std::vector<float> lastline = _Donnees[taille-1]; // Pour avoir la derniere ligne du vecteur
-    std::vector<float> recopie(11, 0.0f);
+    std::vector<float> recopie(10, 0.0f);
 
     recopie[0] = lastline[0]+1; // Numéro
     recopie[1] = lastline[1];   // Debit
@@ -457,7 +513,7 @@ void gag::showUpdateDialog() {
     QLineEdit *debitLineEdit = new QLineEdit(updateDialog);
     formLayout->addRow("Debit:", debitLineEdit);
 
-    // Ajoute un champ pour entrer le nouveau débit de la ligne
+    // Ajoute un champ pour entrer le nouvel espacement de la ligne
     QLineEdit *espacementLineEdit = new QLineEdit(updateDialog);
     formLayout->addRow("Espacement:", espacementLineEdit);
 
@@ -515,9 +571,6 @@ void gag::showUpdateDialog() {
     handleEnterKeyPress(diameterLineEdit, lengthLineEdit);
     handleEnterKeyPress(lengthLineEdit, heightLineEdit);
     handleEnterKeyPress(heightLineEdit, nullptr, updateDataAndClose); // Le dernier champ n'a pas de champ suivant, donc next est nul
-
-
-
 
     // Associe la fonction updateDataAndClose au bouton "Update" pour mettre à jour les données de la ligne et fermer la fenêtre de dialogue lorsque l'utilisateur clique sur le bouton
     connect(updateButton, &QPushButton::clicked, updateDataAndClose);
